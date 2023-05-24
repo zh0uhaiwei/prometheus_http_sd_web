@@ -4,7 +4,7 @@
 [English](README_zh.md) | 简体中文
 
 ## 一、前言
-### 当配置多个Prometheus实例，Targets的配置会变得繁琐，官方没有提供统一展示的界面，所以启动本项目。
+### 当配置多个Prometheus实例，Targets的配置会变得繁琐，官方没有提供统一配置、展示的界面，所以启动本项目。
 
 ## 二、Python3组件
 - <a href="https://flask.palletsprojects.com/en/2.3.x/">Flask</a>
