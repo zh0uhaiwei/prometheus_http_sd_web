@@ -4,7 +4,7 @@
 English | [简体中文](README_zh.md)
 
 ## Preface
-### When configuring multiple Prometheus instances, the configuration of Targets becomes cumbersome, and the official does not provide a unified display interface, so this project is launched.
+### When configuring multiple Prometheus instances, the configuration of Targets becomes cumbersome, and the official interface for unified configuration and display is not provided, so this project is launched.
 
 ## Python3 Requirements
 - <a href="https://flask.palletsprojects.com/en/2.3.x/">Flask</a>
