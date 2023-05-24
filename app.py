@@ -18,7 +18,7 @@ app.config['REDIS_PASSWORD'] = ""
 
 app.debug = False
 
-@app.route('/prom/api/v1/<opt>/targets', methods=['post'])
+@app.route('/api/v1/<opt>/targets', methods=['post'])
 def prom_targets_opt(opt):
     request_data = request.get_data(as_text=True)
     logging.info(f'this request data:{request_data}')
@@ -71,7 +71,7 @@ def prom_targets_opt(opt):
       resp['msg'] = f'{exerr}'
     return json.dumps(resp,indent=4),200,{"Content-Type": "application/json"}
 
-@app.route('/prom/overview', methods=['get'])
+@app.route('/overview', methods=['get'])
 def prom_overview():
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     logging.info(f"request from {requestIP} for overview")
@@ -98,7 +98,7 @@ def prom_overview():
       return json.dumps(results,ensure_ascii=False,indent=4),200,{"Content-Type": "application/json"}
     return render_template('overview.html', results=results)
 
-@app.route('/prom/query', methods=['get'])
+@app.route('/api/v1/query', methods=['get'])
 def prom_query():
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     logging.info(f"request from {requestIP} for query")
@@ -125,7 +125,7 @@ def prom_query():
     return json.dumps(result,ensure_ascii=False,indent=4),200,{"Content-Type": "application/json"}
 
 
-@app.route('/prom/http_sd/<prom_server>/<job_name>', methods=['get'])
+@app.route('/http_sd/<prom_server>/<job_name>', methods=['get'])
 def prom_http_sd(prom_server,job_name):
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     logging.info(f"request from {requestIP} for {prom_server} and {job_name}")
