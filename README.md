@@ -1,5 +1,5 @@
 # <p align="center">Prometheus_http_sd_targets</p>
-# <p align="center">is a web service for<a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus HTTP SD</a></p>
+# <p align="center">is a web service for <a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus HTTP SD</a></p>
 
 English | [简体中文](README_zh.md)
 
