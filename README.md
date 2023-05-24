@@ -17,8 +17,23 @@ cd prom_http_sd
 pip3 install -r requirments.txt
 python3 app.py
 ```
-### 3、Browse http://localhost:8099
+### 3、Browse http://prometheus_http_sd:8099/overview
+### 4、Configure Prometheus
+Add a block to the `scrape_configs` of your prometheus.yml config file:
 
+```yaml
+scrape_configs:
+- job_name: firstjob
+    http_sd_configs:
+    - url:  http://prometheus_http_sd/http_sd/prom_server1/firstjob
+      refresh_interval: 1h
+```
+### 5、Convenient APIs
+- http://prometheus_http_sd:8099/query #for json output
+- http://prometheus_http_sd:8099/api/v1/add/targets #for add targets
+- http://prometheus_http_sd:8099/api/v1/del/targets #for del targets
+- http://prometheus_http_sd:8099/http_sd #for prometheus http sd
+- 
 ## License
 
 This software is free to use under the MIT License [MIT license](/LICENSE).
