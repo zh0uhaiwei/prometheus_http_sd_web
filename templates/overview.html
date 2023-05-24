@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="stylesheet" href="https://webshare.stock.hnchasing.com/download/soft/bootstrap-4.6.2-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 <title>Prometheus HTTP SD Targets</title>
 </head>
 <body>
-<script src="https://webshare.stock.hnchasing.com/download/soft/bootstrap-4.6.2-dist/js/jquery.min.js"></script>
-<script src="https://webshare.stock.hnchasing.com/download/soft/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-7ymO4nGrkm372HoSbq1OY2DP4pEZnMiA+E0F3zPr+JQQtQ82gQ1HPY3QIVtztVua" crossorigin="anonymous"></script>
 <script>
 $(document).ready(function(){
  $('#delTargetModal').on('show.bs.modal', function (event) {
   relTarget = $(event.relatedTarget);
-  var prom = relTarget.data('valprom') // Extract info from data-* attributes;
+  var prom = relTarget.data('valprom');
   console.log(prom)
   var job = relTarget.data('valjob')
   var labels = relTarget.data('vallabels')
@@ -25,8 +25,8 @@ $(document).ready(function(){
   modal.find('#delTargetTarget').val(targets);
 });
  $('#addTargetsModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget) // Button that triggered the modal;
-  var prom = button.data('valprom') // Extract info from data-* attributes;
+  var button = $(event.relatedTarget);
+  var prom = button.data('valprom');
   var job = button.data('valjob')
   var labels = button.data('vallabels')
   var modal = $(this);
@@ -56,7 +56,7 @@ $.ajax(
 $.ajax(
                  {
                  type: 'post',
-                 url: 'http://10.60.195.198/prom/api/v1/add/targets',
+                 url: 'http://prometheus_http_sd/api/v1/add/targets',
                  data: JSON.stringify(paras),
                  dataType: 'json',
                  contentType: 'application/json,charset=utf-8',
