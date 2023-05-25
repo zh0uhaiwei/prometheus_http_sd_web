@@ -42,7 +42,7 @@ $(document).ready(function(){
 $.ajax(
                  {
                  type: 'post',
-                 url: 'http://10.60.195.198/prom/api/v1/del/targets',
+                 url: '/api/v1/del/targets',
                  data: JSON.stringify(paras),
                  dataType: 'json',
                  contentType: 'application/json,charset=utf-8',
@@ -56,7 +56,7 @@ $.ajax(
 $.ajax(
                  {
                  type: 'post',
-                 url: 'http://prometheus_http_sd/api/v1/add/targets',
+                 url: '/api/v1/add/targets',
                  data: JSON.stringify(paras),
                  dataType: 'json',
                  contentType: 'application/json,charset=utf-8',
