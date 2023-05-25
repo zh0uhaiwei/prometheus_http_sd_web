@@ -1,5 +1,5 @@
 # <p align="center">Prometheus_http_sd_web</p>
-# <p align="center">是一个<a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus http service discovery.</a>的web服务</p>
+# <p align="center">是一个用于<a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus http service discovery</a>的统一查询、配置的web服务</p>
 
 [English](README_zh.md) | 简体中文
 
