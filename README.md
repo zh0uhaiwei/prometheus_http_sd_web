@@ -1,22 +1,22 @@
-# <p align="center">Prometheus_http_sd_targets</p>
-# <p align="center">is a web service for <a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus HTTP SD</a></p>
+# <p align="center">Prometheus_http_sd_web</p>
+# <p align="center">is a web service for <a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus http service discovery.</a></p>
 
 English | [简体中文](README_zh.md)
 
 ## Preface
-### When configuring multiple Prometheus instances, the configuration of Targets becomes cumbersome, and the official interface for unified configuration and display is not provided, so this project is launched.
+### When configuring multiple Prometheus instances, the configuration of Targets becomes very cumbersome, and the official does not provide a unified configuration and display interface, so this project is launched. Through this project, it is possible to directly configure targets for multiple Prometheus instances on a web page.
 
 ## Python3 Requirements
 - <a href="https://flask.palletsprojects.com/en/2.3.x/">Flask</a>
 - <a href="https://pypi.org/project/redis/">redis-py</a>
 
 ## GetStarted
-### 1、Start a <a href="https://redis.io/docs/getting-started/">Redis</a> instance
+### 1、Start a <a href="https://redis.io/docs/getting-started/">Redis</a> or a <a href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/getting-started.html">MySQL</a> instance
 ### 2、Start app
 ```shell
-git clone https://github.com/zh0uhaiwei/prometheus_http_sd_targets.git prom_http_sd
+git clone https://github.com/zh0uhaiwei/prometheus_http_sd_web.git prom_http_sd
 cd prom_http_sd
-#Edit redis instance config in app.config
+#Edit redis or mysql instance config in app.config
 pip3 install -r requirments.txt
 python3 app.py
 ```
