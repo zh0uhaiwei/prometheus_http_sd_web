@@ -1,22 +1,22 @@
-# <p align="center">Prometheus_http_sd_targets</p>
-# <p align="center">是一个<a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus HTTP SD</a>的web服务</p>
+# <p align="center">Prometheus_http_sd_web</p>
+# <p align="center">是一个<a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus http service discovery.</a>的web服务</p>
 
 [English](README_zh.md) | 简体中文
 
 ## 一、前言
-### 当配置多个Prometheus实例，Targets的配置会变得繁琐，官方没有提供统一配置、展示的界面，所以启动本项目。
+### 当配置多个Prometheus实例，Targets的配置会变得非常繁琐，官方没有提供统一配置、展示的界面，所以启动本项目。通过本项目，可能直接在web页面上为多个Prometheus实例配置targets。
 
 ## 二、Python3组件
 - <a href="https://flask.palletsprojects.com/en/2.3.x/">Flask</a>
 - <a href="https://pypi.org/project/redis/">redis-py</a>
 
 ## 三、开始
-### 1、启动<a href="https://redis.io/docs/getting-started/">Redis</a>实例
+### 1、启动<a href="https://redis.io/docs/getting-started/">Redis</a>或者<a href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/getting-started.html">MySQL</a>实例
 ### 2、启动app
 ```shell
-git clone https://github.com/zh0uhaiwei/prometheus_http_sd_targets.git prom_http_sd
+git clone https://github.com/zh0uhaiwei/prometheus_http_sd_web.git prom_http_sd
 cd prom_http_sd
-#Edit redis instance config in app.config
+#Edit redis instance/mysql config in app.config
 pip3 install -r requirments.txt
 python3 app.py
 ```
