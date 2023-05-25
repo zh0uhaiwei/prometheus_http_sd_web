@@ -1,7 +1,7 @@
 # <p align="center">Prometheus_http_sd_web</p>
 # <p align="center">是一个用于<a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus http service discovery</a>的统一查询、配置的web服务</p>
 
-[English](README_zh.md) | 简体中文
+[English](README.md) | 简体中文
 
 ## 一、前言
 ### 当配置多个Prometheus实例，Targets的配置会变得非常繁琐，官方没有提供统一配置、展示的界面，所以启动本项目。通过本项目，可能直接在web页面上为多个Prometheus实例配置targets。
