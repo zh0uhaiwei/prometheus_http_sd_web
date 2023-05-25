@@ -1,10 +1,9 @@
-# <p align="center">Prometheus_http_sd_web</p>
-# <p align="center">is a web service for <a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus http service discovery.</a></p>
+# <p align="center">Prometheus_http_sd_web is a web service for <a href="https://prometheus.io/docs/prometheus/latest/http_sd/">Prometheus http service discovery.</a></p>
 
 English | [简体中文](README_zh.md)
 
 ## Preface
-### When configuring multiple Prometheus instances, the configuration of Targets becomes very cumbersome, and the official does not provide a unified configuration and display interface, so this project is launched. Through this project, it is possible to directly configure targets for multiple Prometheus instances on a web page.
+### When configuring multiple Prometheus instances, the configuration of Targets becomes very cumbersome, and the official does not provide a unified configuration and display interface, so this project is launched. Through this project, it is easy to directly add and delete targets for multiple Prometheus instances on the web page.
 
 ## Python3 Requirements
 - <a href="https://flask.palletsprojects.com/en/2.3.x/">Flask</a>
