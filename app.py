@@ -84,7 +84,7 @@ def prom_targets_opt(opt):
             for target in resp_json['targets'].split(','):
               target_ip,target_port = target.split(':')
               logging.info(f'{appGroup} {var_app} {group} {target_ip} {target_port}')
-              pipe.execute(f'insert into target (prom_ip,job,labels,target_ip,target_port) values ("{prom}","{job}","{labels}","{target_ip}",{target_port});')
+              pipe.execute(f'insert into prom_http_sd_web (prom_ip,job,labels,target_ip,target_port) values ("{prom}","{job}","{labels}","{target_ip}",{target_port});')
               logging.info(f'add {prom} {job} {labels} {target}')
               db.commit()
           except Exception as exerr:
@@ -103,7 +103,7 @@ def prom_targets_opt(opt):
             for target in resp_json['targets'].split(','):
                 logging.info(f'delete {prom} {job} {labels} {target}')
                 target_ip,target_port = target.split(':')
-                pipe.execute(f"delete from target where prom_ip='{prom}' and job='{job}' and labels='{labels}' and target_ip='{target_ip}' and target_port={target_port};")
+                pipe.execute(f"delete from prom_http_sd_web where prom_ip='{prom}' and job='{job}' and labels='{labels}' and target_ip='{target_ip}' and target_port={target_port};")
             db.commit()
           except Exception as exerr:
             db.rollback()
@@ -208,7 +208,7 @@ def prom_query():
       iLabels = ','.join(labels)
       q.append(f"labels='{iLabels}'")
       qwhere = ' and '.join(q)
-      pipe.execute("select prom_ip,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from target where {qwhere} group by prom_ip,job,labels;")
+      pipe.execute("select prom_ip,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from prom_http_sd_web where {qwhere} group by prom_ip,job,labels;")
       qResults = pipe.fetchall()
       results = []
       for qResult in qResults:
@@ -247,7 +247,7 @@ def prom_http_sd(prom_server,job_name):
             labels[labelKey] = labelValue
           result.append({"targets": [target for target in targets],"labels": labels})
     if current_app.config['DATABASE_BACKEND'] == 'mysql':
-      pipe.execute(f"select prom_ip,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from target where prom_ip='{prom_server}' and job='{job_name}' group by prom_ip,job,labels;")
+      pipe.execute(f"select prom_ip,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from prom_http_sd_web where prom_ip='{prom_server}' and job='{job_name}' group by prom_ip,job,labels;")
       qResults = pipe.fetchall()
       for qResult in qResults:
         originLabels = qResult[2]
