@@ -8,8 +8,35 @@ English | [简体中文](README_zh.md)
 ## Python3 Requirements
 - <a href="https://flask.palletsprojects.com/en/2.3.x/">Flask</a>
 - <a href="https://pypi.org/project/redis/">redis-py</a>
+- <a href="https://github.com/PyMySQL/PyMySQL">PyMySQL</a>
 
 ## GetStarted
+### Set environment variables
+#### for redis
+```shell
+export DATABASE_BACKEND="redis"
+export REDIS_HOST="192.168.1.1"
+export REDIS_PORT=6379
+export REDIS_DB=8
+export REDIS_PASSWORD="password"
+```
+#### for mysql
+```shell
+mysql>CREATE DATABASE database;
+mysql>CREATE TABLE `prom_http_sd_web` (
+  `prom` varchar(24) COLLATE utf8_bin NOT NULL,
+  `job` varchar(20) COLLATE utf8_bin NOT NULL,
+  `labels` varchar(128) COLLATE utf8_bin NOT NULL,
+  `target_ip` varchar(128) COLLATE utf8_bin NOT NULL,
+  `target_port` int(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+export DATABASE_BACKEND="mysql"
+export MYSQL_HOST="192.168.1.2"
+export MYSQL_USER="user"
+export MYSQL_PORT=3306
+export MYSQL_PASSWORD="password"
+export MYSQL_DATABASE="database"
+```
 ### Use Docker
 ```shell
 docker pull zh0uhaiwei/prometheus_http_sd_web:latest
