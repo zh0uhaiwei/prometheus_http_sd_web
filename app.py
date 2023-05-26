@@ -115,7 +115,7 @@ def prom_targets_opt(opt):
       resp['msg'] = f'{exerr}'
     return json.dumps(resp,indent=4),200,{"Content-Type": "application/json"}
 
-@app.route('/prom1/overview', methods=['get'])
+@app.route('/prom/overview', methods=['get'])
 def prom_overview():
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     logging.info(f"request from {requestIP} for overview")
@@ -162,7 +162,7 @@ def prom_overview():
       return json.dumps(results,ensure_ascii=False,indent=4),200,{"Content-Type": "application/json"}
     return render_template('overview.html', results=results)
 
-@app.route('/prom/query', methods=['get'])
+@app.route('/prom/api/v1/query', methods=['get'])
 def prom_query():
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     logging.info(f"request from {requestIP} for query")
