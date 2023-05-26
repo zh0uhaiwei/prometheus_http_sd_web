@@ -10,11 +10,12 @@ English | [简体中文](README_zh.md)
 - <a href="https://pypi.org/project/redis/">redis-py</a>
 
 ## GetStarted
-### Docker
+### Use Docker
 ```shell
 docker pull zh0uhaiwei/prometheus_http_sd_web:latest
 docker run -ti --rm --name prom_http_sd -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
 ```
+### Use Scripts
 ### 1、Start a <a href="https://redis.io/docs/getting-started/">Redis</a> or a <a href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/getting-started.html">MySQL</a> instance
 ### 2、Start app
 ```shell
