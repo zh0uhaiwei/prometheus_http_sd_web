@@ -1,43 +1,41 @@
 #!/usr/bin/env python3
-import sys
+import os
 from flask import request,Flask,render_template,current_app,url_for
 import json
-import logging
 import redis
 import time
 import pymysql
 import atexit
-logging.basicConfig(filename='prom_http_sd.log',level=logging.INFO,
-                    format="%(asctime)s %(name)s %(levelname)s %(message)s",
-                    datefmt = '%Y-%m-%d  %H:%M:%S %a')
 import socket
 app = Flask(__name__,
             static_url_path='/prom',
             static_folder='static',
             template_folder='templates')
-app.config['REDIS_HOST'] = ""
-app.config['REDIS_PORT'] = 6379
-app.config['REDIS_DB'] = 9
-app.config['REDIS_PASSWORD'] = ""
-app.config['MYSQL_HOST'] = ""
-app.config['MYSQL_USER'] = ''
-app.config['MYSQL_PORT'] = 3306
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DATABASE'] = ''
-app.config['DATABASE_BACKEND'] = 'mysql'   #mysql or redis
+app.config['DATABASE_BACKEND'] = os.getenv('DATABASE_BACKEND')
+if app.config['DATABASE_BACKEND'] == 'redis':
+  print("FOUND redis")
+  app.config['REDIS_HOST'] = os.getenv('REDIS_HOST')
+  app.config['REDIS_PORT'] = int(os.getenv('REDIS_PORT'))
+  app.config['REDIS_DB'] = int(os.getenv('REDIS_DB'))
+  app.config['REDIS_PASSWORD'] = os.getenv('REDIS_PASSWORD')
+elif app.config['DATABASE_BACKEND'] == 'mysql':
+  print('Found mysql')
+  app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
+  app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
+  app.config['MYSQL_PORT'] = int(os.getenv('MYSQL_PORT'))
+  app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
+  app.config['MYSQL_DATABASE'] = os.getenv('MYSQL_DATABASE')
+else:
+  print('NO DATABASE_BACKEND FOUND')
+  exit(1)
 app.debug = False
-def pymysql_query(var_pipe):
-  var_result = []
-  for i in var_pipe:
-    var_result.append(i[0])
-  return var_result
 @app.route('/prom/api/v1/<opt>/targets', methods=['post'])
 def prom_targets_opt(opt):
     request_data = request.get_data(as_text=True)
-    logging.info(f'this request data:{request_data}')
+    print(f'this request data:{request_data}')
     resp_json = json.loads(request_data)
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-    logging.info(f"request from {requestIP}")
+    print(f"request from {requestIP}")
     resp_keys = resp_json.keys()
     if 'prom' not in resp_keys:
       return 'no prom server'
@@ -48,6 +46,9 @@ def prom_targets_opt(opt):
     if 'labels' not in resp_keys:
       return 'no labels'
     labels = resp_json["labels"]
+    unsortedLabels=labels.split(',')
+    unsortedLabels.sort()
+    labels=','.join(unsortedLabels)
     if 'targets' not in resp_keys:
       return 'no targets'
     try:
@@ -67,14 +68,11 @@ def prom_targets_opt(opt):
         return "NO DATABASE_BACKEND FOUND"
       var_date = time.strftime('%Y%m%d')
       if opt == "add":
-        unsortedLabels=labels.split(',')
-        unsortedLabels.sort()
-        labels=','.join(unsortedLabels)
         if current_app.config['DATABASE_BACKEND'] == 'redis':
           for target in resp_json['targets'].split(','):
               pipe.sadd(f'/prom/{prom}/job/{job}/targets',target)
               pipe.sadd(f'/prom/{prom}/job/{job}/labels/{labels}/targets',target)
-              logging.info(f'add {prom} {job} {labels} {target}')
+              print(f'add {prom} {job} {labels} {target}')
           pipe.sadd(f'/prom/proms',prom)
           pipe.sadd(f'/prom/{prom}/jobs',job)
           pipe.sadd(f'/prom/{prom}/job/{job}/labels',f'{labels}')
@@ -83,42 +81,44 @@ def prom_targets_opt(opt):
           try:
             for target in resp_json['targets'].split(','):
               target_ip,target_port = target.split(':')
-              logging.info(f'{appGroup} {var_app} {group} {target_ip} {target_port}')
-              pipe.execute(f'insert into prom_http_sd_web (prom_ip,job,labels,target_ip,target_port) values ("{prom}","{job}","{labels}","{target_ip}",{target_port});')
-              logging.info(f'add {prom} {job} {labels} {target}')
+              pipe.execute(f'insert into prom_http_sd_web (prom,job,labels,target_ip,target_port) values ("{prom}","{job}","{labels}","{target_ip}",{target_port});')
+              print(f'add {prom} {job} {labels} {target}')
               db.commit()
           except Exception as exerr:
             db.rollback()
-            logging.info(exerr)
+            print(exerr)
             
       if opt == "del":
         if current_app.config['DATABASE_BACKEND'] == 'redis':
           for target in resp_json['targets'].split(','):
-              logging.info(f'delete {prom} {job} {labels} {target}')
+              print(f'delete {prom} {job} {labels} {target}')
               pipe.srem(f'/prom/{prom}/job/{job}/targets',target)
               pipe.srem(f'/prom/{prom}/job/{job}/labels/{labels}/targets',target)
           pipe.execute()
         if current_app.config['DATABASE_BACKEND'] == 'mysql':
           try:
             for target in resp_json['targets'].split(','):
-                logging.info(f'delete {prom} {job} {labels} {target}')
+                unsortedLabels=labels.split(',')
+                unsortedLabels.sort()
+                labels=','.join(unsortedLabels)
                 target_ip,target_port = target.split(':')
-                pipe.execute(f"delete from prom_http_sd_web where prom_ip='{prom}' and job='{job}' and labels='{labels}' and target_ip='{target_ip}' and target_port={target_port};")
+                pipe.execute(f"delete from prom_http_sd_web where prom='{prom}' and job='{job}' and labels='{labels}' and target_ip='{target_ip}' and target_port={target_port};")
+                print(f'delete {prom} {job} {labels} {target}')
             db.commit()
           except Exception as exerr:
             db.rollback()
-            logging.info(exerr)
+            print(exerr)
       resp['msg'] = f'{opt} targets {resp_json["targets"]} with labels {labels} success.'
     except Exception as exerr:
       resp['err'] = 1
-      logging.info(exerr)
+      print(exerr)
       resp['msg'] = f'{exerr}'
     return json.dumps(resp,indent=4),200,{"Content-Type": "application/json"}
 
 @app.route('/prom/overview', methods=['get'])
 def prom_overview():
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-    logging.info(f"request from {requestIP} for overview")
+    print(f"request from {requestIP} for overview")
     if current_app.config['DATABASE_BACKEND'] == 'redis':
       pool = redis.ConnectionPool(host=current_app.config['REDIS_HOST'],port=current_app.config['REDIS_PORT'],db=current_app.config['REDIS_DB'],password=current_app.config['REDIS_PASSWORD'],decode_responses=True)
       r = redis.Redis(connection_pool=pool)
@@ -133,22 +133,20 @@ def prom_overview():
     if current_app.config['DATABASE_BACKEND'] == 'redis':
       proms = r.smembers('/prom/proms')
       for prom in proms:
-        result = {}
-        result['prom'] = prom
         jobs = r.smembers(f'/prom/{prom}/jobs')
         for job in jobs:
           labels = r.smembers(f'/prom/{prom}/job/{job}/labels')
-          result['job']=job
           for label in labels:
-            result['labels'] = label
             targets = r.smembers(f'/prom/{prom}/job/{job}/labels/{label}/targets')
             if len(targets)>0:
+              result = {}
+              result['prom'] = prom
+              result['labels'] = label
+              result['job']=job
               result['targets'] = (','.join(targets))
-            else:
-              result['targets'] = ''
-          results.append(result)
+              results.append(result)
     if current_app.config['DATABASE_BACKEND'] == 'mysql':
-      pipe.execute("select prom_ip,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from target group by prom_ip,job,labels;")
+      pipe.execute("select prom,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from prom_http_sd_web group by prom,job,labels;")
       qResults = pipe.fetchall()
       results = []
       for qResult in qResults:
@@ -157,6 +155,7 @@ def prom_overview():
         result['job'] = qResult[1]
         result['labels'] = qResult[2]
         result['targets'] = qResult[3]
+        results.append(result)
     q = request.args.get("format",default="html",type=str)
     if q == 'json':
       return json.dumps(results,ensure_ascii=False,indent=4),200,{"Content-Type": "application/json"}
@@ -165,7 +164,7 @@ def prom_overview():
 @app.route('/prom/api/v1/query', methods=['get'])
 def prom_query():
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-    logging.info(f"request from {requestIP} for query")
+    print(f"request from {requestIP} for query")
     if current_app.config['DATABASE_BACKEND'] == 'redis':
       pool = redis.ConnectionPool(host=current_app.config['REDIS_HOST'],port=current_app.config['REDIS_PORT'],db=current_app.config['REDIS_DB'],password=current_app.config['REDIS_PASSWORD'],decode_responses=True)
       r = redis.Redis(connection_pool=pool)
@@ -208,7 +207,7 @@ def prom_query():
       iLabels = ','.join(labels)
       q.append(f"labels='{iLabels}'")
       qwhere = ' and '.join(q)
-      pipe.execute("select prom_ip,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from prom_http_sd_web where {qwhere} group by prom_ip,job,labels;")
+      pipe.execute("select prom,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from prom_http_sd_web where {qwhere} group by prom,job,labels;")
       qResults = pipe.fetchall()
       results = []
       for qResult in qResults:
@@ -224,7 +223,7 @@ def prom_query():
 @app.route('/prom/http_sd/<prom_server>/<job_name>', methods=['get'])
 def prom_http_sd(prom_server,job_name):
     requestIP = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-    logging.info(f"request from {requestIP} for {prom_server} and {job_name}")
+    print(f"request from {requestIP} for {prom_server} and {job_name}")
     if current_app.config['DATABASE_BACKEND'] == 'redis':
       pool = redis.ConnectionPool(host=current_app.config['REDIS_HOST'],port=current_app.config['REDIS_PORT'],db=current_app.config['REDIS_DB'],password=current_app.config['REDIS_PASSWORD'],decode_responses=True)
       r = redis.Redis(connection_pool=pool)
@@ -247,7 +246,7 @@ def prom_http_sd(prom_server,job_name):
             labels[labelKey] = labelValue
           result.append({"targets": [target for target in targets],"labels": labels})
     if current_app.config['DATABASE_BACKEND'] == 'mysql':
-      pipe.execute(f"select prom_ip,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from prom_http_sd_web where prom_ip='{prom_server}' and job='{job_name}' group by prom_ip,job,labels;")
+      pipe.execute(f"select prom,job,labels,group_concat(concat(target_ip,':',target_port)) as targets from prom_http_sd_web where prom='{prom_server}' and job='{job_name}' group by prom,job,labels;")
       qResults = pipe.fetchall()
       for qResult in qResults:
         originLabels = qResult[2]
