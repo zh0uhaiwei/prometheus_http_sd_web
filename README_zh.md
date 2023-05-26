@@ -10,6 +10,12 @@
 - <a href="https://pypi.org/project/redis/">redis-py</a>
 
 ## 三、开始
+### 使用Docker
+```shell
+docker pull zh0uhaiwei/prometheus_http_sd_web:latest
+docker run -ti --rm --name prom_http_sd -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
+```
+### 使用脚本
 ### 1、启动<a href="https://redis.io/docs/getting-started/">Redis</a>或者<a href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/getting-started.html">MySQL</a>实例
 ### 2、启动app
 ```shell
