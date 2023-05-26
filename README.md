@@ -19,7 +19,7 @@ cd prom_http_sd
 pip3 install -r requirments.txt
 python3 app.py
 ```
-### 3、Browse http://prometheus_http_sd:8000/overview
+### 3、Browse http://prometheus_http_sd:8000/prom/overview
 ### 4、Configure Prometheus
 Add a block to the `scrape_configs` of your prometheus.yml config file:
 
@@ -27,13 +27,13 @@ Add a block to the `scrape_configs` of your prometheus.yml config file:
 scrape_configs:
 - job_name: firstjob
     http_sd_configs:
-    - url:  http://prometheus_http_sd:8099/http_sd/prom_server1/firstjob
+    - url:  http://prometheus_http_sd:8099/prom/http_sd/prom_server1/firstjob
       refresh_interval: 1h
 ```
 ### 5、Convenient APIs
-- http://prometheus_http_sd:8000/api/v1/query #for json output
-- http://prometheus_http_sd:8000/api/v1/add/targets #for add targets
-- http://prometheus_http_sd:8000/api/v1/del/targets #for del targets
+- http://prometheus_http_sd:8000/prom/api/v1/query #for json output
+- http://prometheus_http_sd:8000/prom/api/v1/add/targets #for add targets
+- http://prometheus_http_sd:8000/prom/api/v1/del/targets #for del targets
 
 ## License
 
