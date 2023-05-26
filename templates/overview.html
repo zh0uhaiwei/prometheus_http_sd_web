@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<!-- 必须的 meta 标签 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap 的 CSS 文件 -->
+<link rel="stylesheet" href="/prom1/bootstrap.min.css">
+<title>Prometheus HTTP SD Targets</title>
+</head>
+<body>
+<script src="/prom/jquery.min.js"></script>
+<script src="/prom/bootstrap.bundle.min.js"></script>
+<script src="/prom/target.min.js"></script>
+<h1 class="align-middle text-center">Prometheus HTTP SD Targets</h1>
+<table class="table table-bordered table-hover align-middle border border-primary">
+<thead>
+<tr>
+<th scope="col" class="align-middle text-center">prom</th>
+<th scope="col" class="align-middle text-center">job</th>
+<th scope="col" class="align-middle text-center">labels</th>
+<th scope="col" class="align-middle text-center">targets</th>
+</tr>
+</thead>
+<tbody>
+{% for result in results %}
+<tr>
+<td scope="row" class="align-middle text-center">{{ result.prom }}</td>
+<td class="align-middle text-center">{{ result.job }}</td>
+<td class="align-middle text-left">
+{% for label in result.labels.split(',') %}
+        <li><span>{{ label }}</span></li>
+{% endfor %}
+</td>
+<td class="align-middle text-left">
+{% if result.targets != '' %}
+{% for target in result.targets.split(',') %}
+        <li><span>{{ target }}</span><a href="#" data-toggle="modal" data-target="#delTargetModal" data-valprom="{{ result.prom }}" data-valjob="{{ result.job }}" data-vallabels="{{ result.labels }}" data-valtarget="{{ target }}"> [Del] </a></li>
+{% endfor %}
+{% endif %}
+<li><a href="#" data-toggle="modal" data-target="#addTargetsModal" data-valprom="{{ result.prom }}" data-valjob="{{ result.job }}" data-vallabels="{{ result.labels }}"> [Add] </button></li>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<div class="modal fade" id="delTargetModal" tabindex="-1" aria-labelledby="delTargetModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delTargetModalLabel">Delete Target</h5>
+        <a class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="delTargetProm" class="col-form-label">Prom:</label>
+            <input type="text" class="form-control" id="delTargetProm">
+          </div>
+          <div class="form-group">
+            <label for="delTargetJob" class="col-form-label">Job:</label>
+            <input type="text" class="form-control" id="delTargetJob">
+          </div>
+          <div class="form-group">
+            <label for="delTargetLabels" class="col-form-label">Labels:</label>
+            <input type="text" class="form-control" id="delTargetLabels">
+          </div>
+          <div class="form-group">
+            <label for="delTargetTarget" class="col-form-label">Target:</label>
+            <input type="text" class="form-control" id="delTargetTarget">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal">[Close]</a>
+        <a href="#" id="confirmDelTarget">[Delete Target]</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="addTargetsModal" tabindex="-1" aria-labelledby="addTargetsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTargetsModalLabel">Add Targets</h5>
+        <a class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="addTargetProm" class="col-form-label">Prom</label>
+            <input type="text" class="form-control" id="addTargetProm">
+          </div>
+          <div class="form-group">
+            <label for="addTargetJob" class="col-form-label">Job</label>
+            <input type="text" class="form-control" id="addTargetJob">
+          </div>
+          <div class="form-group">
+            <label for="addTargetLabels" class="col-form-label">Labels:逗号分隔key=value键值对</label>
+            <input type="text" class="form-control" id="addTargetLabels">
+          </div>
+          <div class="form-group">
+            <label for="addTargetTargets" class="col-form-label">Targets逗号分隔ip:port</label>
+            <input type="text" class="form-control" id="addTargetTargets">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal">[Close]</a>
+        <a href="#" id="confirmAddTargets" >[Add Targets]</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Result Message</h5>
+        <a class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </div>
+      <div class="modal-body">
+        <form>
+            <label class="col-form-label" id="confirmMessage">ok</label>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal">[Close]</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
