@@ -37,6 +37,7 @@ redis-cli -h $REDIS_HOST -p $REDIS_PORT
 31) "/prom/192.168.164.15/job/job2/labels/app=app8,group=group1/targets"
 32) "/prom/192.168.219.15/job/job2/labels/app=app2,group=group1/targets"
 33) "/prom/proms"
+```
 
 ### use docker
 ```shell
@@ -57,7 +58,7 @@ export REDIS_PASSWORD="password"
 docker run -it --name prom_http_sd_webb -e DATABASE_BACKEND=mysql -e MYSQL_HOST=192.168.1.2 -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=database -e MYSQL_PORT=3306 -e MYSQL_USER=user -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
 ```
 ### use shell
-```
+```shell
 mysql -h $MYSQL_HOST -u $MYSQL_USER -P $MYSQL_PORT -p $MYSQL_DATABASE
 >CREATE TABLE `prom_http_sd_web` (
   `prom` varchar(18) COLLATE utf8_bin NOT NULL,
@@ -175,9 +176,14 @@ export MYSQL_DATABASE="database"
 +----------------+------+---------------------------------------------------+-----------------+-------------+
 ```
 ## Example
-/prom/overview.html
-![图片](https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/f1b33368-1075-4842-abce-a3bb1a2fd8af)
+### /prom/overview.html
+<p align="center">
+    <img src="https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/f1b33368-1075-4842-abce-a3bb1a2fd8af"/>
+</p>)
 
-/prom/api/v1/query?prom=192.168.138.15
-![图片](https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/ab93c59b-ece0-48f1-9592-5355550637b6)
+### /prom/api/v1/query?prom=192.168.138.15
+<p align="center">
+    <img src="https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/70d79e71-c705-47f0-ad59-4c04854a0945"/>
+</p>)
+
 
