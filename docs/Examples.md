@@ -181,9 +181,12 @@ export MYSQL_DATABASE="database"
     <img src="https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/f1b33368-1075-4842-abce-a3bb1a2fd8af"/>
 </p>)
 
-### /prom/api/v1/query?prom=192.168.138.15
+### /prom/http_sd/192.168.138.15/job1
 <p align="center">
-    <img src="https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/70d79e71-c705-47f0-ad59-4c04854a0945"/>
+    <img src="https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/e2a07e33-faa5-4282-b9ab-b920d6ea6010"/>
 </p>)
 
-
+### /prom/api/v1/query?prom=192.168.138.15
+<p align="center">
+    <img src="https://github.com/zh0uhaiwei/prometheus_http_sd_web/assets/113036309/2b0d2d23-099d-48a7-84f0-b2ccf426fee2"/>
+</p>)
