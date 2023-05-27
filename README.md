@@ -45,7 +45,7 @@ docker run -it --name prom_http_sd_webb -e DATABASE_BACKEND=mysql -e MYSQL_HOST=
 #use redis for db backend
 docker run -it --name prom_http_sd_webb -e DATABASE_BACKEND=redis -e REDIS_HOST=192.168.1.1 -e REDIS_PASSWORD=password -e REDIS_DB=8 -e REDIS_PORT=6379 -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
 ```
-### Use Scripts
+### Use Shell
 ### 1、Start a <a href="https://redis.io/docs/getting-started/">Redis</a> or a <a href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/getting-started.html">MySQL</a> instance
 ### 2、Start app
 ```shell
