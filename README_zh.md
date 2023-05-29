@@ -73,7 +73,7 @@ scrape_configs:
 - http://prometheus_http_sd:8000/prom/api/v1/add/targets #for add targets
 - http://prometheus_http_sd:8000/prom/api/v1/del/targets #for del targets
 
-### <a href="https://github.com/zh0uhaiwei/prometheus_http_sd_web/docs/Examples.md">文档和示例</a>
+### <a href="https://github.com/zh0uhaiwei/prometheus_http_sd_web/blob/main/docs/Examples.md">文档和示例</a>
 
 ## License
 
