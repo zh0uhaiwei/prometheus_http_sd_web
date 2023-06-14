@@ -63,7 +63,6 @@ def prom_targets_opt(opt):
       elif current_app.config['DATABASE_BACKEND'] == 'mysql':
         db=pymysql.connect(host=current_app.config['MYSQL_HOST'],port=current_app.config['MYSQL_PORT'],db=current_app.config['MYSQL_DATABASE'],user=current_app.config['MYSQL_USER'],password=current_app.config['MYSQL_PASSWORD'])
         pipe=db.cursor()
-        atexit.register(pymysql.connect.close,db)
       else:
         return "NO DATABASE_BACKEND FOUND"
       var_date = time.strftime('%Y%m%d')
@@ -87,6 +86,7 @@ def prom_targets_opt(opt):
           except Exception as exerr:
             db.rollback()
             print(exerr)
+        db.close()
             
       if opt == "del":
         if current_app.config['DATABASE_BACKEND'] == 'redis':
@@ -108,6 +108,7 @@ def prom_targets_opt(opt):
           except Exception as exerr:
             db.rollback()
             print(exerr)
+        db.close()
       resp['msg'] = f'{opt} targets {resp_json["targets"]} with labels {labels} success.'
     except Exception as exerr:
       resp['err'] = 1
@@ -126,7 +127,6 @@ def prom_overview():
     elif current_app.config['DATABASE_BACKEND'] == 'mysql':
       db=pymysql.connect(host=current_app.config['MYSQL_HOST'],port=current_app.config['MYSQL_PORT'],db=current_app.config['MYSQL_DATABASE'],user=current_app.config['MYSQL_USER'],password=current_app.config['MYSQL_PASSWORD'])
       pipe=db.cursor()
-      atexit.register(pymysql.connect.close,db)
     else:
       return "NO DATABASE_BACKEND FOUND"
     results = []
@@ -156,6 +156,7 @@ def prom_overview():
         result['labels'] = qResult[2]
         result['targets'] = qResult[3]
         results.append(result)
+      db.close()
     q = request.args.get("format",default="html",type=str)
     if q == 'json':
       return json.dumps(results,ensure_ascii=False,indent=4),200,{"Content-Type": "application/json"}
@@ -168,11 +169,9 @@ def prom_query():
     if current_app.config['DATABASE_BACKEND'] == 'redis':
       pool = redis.ConnectionPool(host=current_app.config['REDIS_HOST'],port=current_app.config['REDIS_PORT'],db=current_app.config['REDIS_DB'],password=current_app.config['REDIS_PASSWORD'],decode_responses=True)
       r = redis.Redis(connection_pool=pool)
-      atexit.register(redis.Redis.close,r)
     elif current_app.config['DATABASE_BACKEND'] == 'mysql':
       db=pymysql.connect(host=current_app.config['MYSQL_HOST'],port=current_app.config['MYSQL_PORT'],db=current_app.config['MYSQL_DATABASE'],user=current_app.config['MYSQL_USER'],password=current_app.config['MYSQL_PASSWORD'])
       pipe=db.cursor()
-      atexit.register(pymysql.connect.close,db)
     else:
       return "NO DATABASE_BACKEND FOUND"
     if current_app.config['DATABASE_BACKEND'] == 'redis':
@@ -217,6 +216,7 @@ def prom_query():
         result['labels'] = qResult[2]
         result['targets'] = qResult[3]
         results.append(result)
+      db.close()
     return json.dumps(results,ensure_ascii=False,indent=4),200,{"Content-Type": "application/json"}
 
 
@@ -227,15 +227,11 @@ def prom_http_sd(prom_server,job_name):
     if current_app.config['DATABASE_BACKEND'] == 'redis':
       pool = redis.ConnectionPool(host=current_app.config['REDIS_HOST'],port=current_app.config['REDIS_PORT'],db=current_app.config['REDIS_DB'],password=current_app.config['REDIS_PASSWORD'],decode_responses=True)
       r = redis.Redis(connection_pool=pool)
-      atexit.register(redis.Redis.close,r)
     elif current_app.config['DATABASE_BACKEND'] == 'mysql':
       db=pymysql.connect(host=current_app.config['MYSQL_HOST'],port=current_app.config['MYSQL_PORT'],db=current_app.config['MYSQL_DATABASE'],user=current_app.config['MYSQL_USER'],password=current_app.config['MYSQL_PASSWORD'])
       pipe=db.cursor()
-      atexit.register(pymysql.connect.close,db)
     else:
       return "NO DATABASE_BACKEND FOUND"
-    daten = time.strftime('%Y%m%d')
-    result = []
     if current_app.config['DATABASE_BACKEND'] == 'redis':
       originLabels = r.smembers(f'/prom/{prom_server}/job/{job_name}/labels')
       for originLabel in originLabels:
@@ -256,7 +252,7 @@ def prom_http_sd(prom_server,job_name):
           labelKey,labelValue = label.split('=')
           labels[labelKey] = labelValue
         result.append({"targets": [target for target in targets.split(',')],"labels": labels})
-
+      db.close()
     return json.dumps(result,ensure_ascii=False,indent=4),200,{"Content-Type": "application/json"}
 
 if __name__ == '__main__':
