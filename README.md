@@ -65,9 +65,9 @@ Add a block to the `scrape_configs` of your prometheus.yml config file:
 ```yaml
 scrape_configs:
 - job_name: firstjob
-    http_sd_configs:
-    - url:  http://prometheus_http_sd:8000/prom/http_sd/prom_server1/firstjob
-      refresh_interval: 1h
+  http_sd_configs:
+  - url:  http://prometheus_http_sd:8000/prom/http_sd/prom_server1/firstjob
+    refresh_interval: 1h
 ```
 
 ### Convenient APIs
