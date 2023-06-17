@@ -2,7 +2,6 @@
 
 English | [简体中文](README_zh.md)
 
-## Preface
 ### When configuring multiple Prometheus instances, the configuration of Targets becomes very cumbersome, and the official does not provide a unified configuration and display interface, so this project is launched. Through this project, it is easy to directly add and delete targets for multiple Prometheus instances on the web page.
 
 ## Python3 Requirements
