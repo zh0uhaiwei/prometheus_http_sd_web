@@ -41,12 +41,12 @@ export MYSQL_DATABASE="database"
 ```shell
 docker pull zh0uhaiwei/prometheus_http_sd_web:latest
 #use mysql for db backend
-docker run -it --name prom_http_sd_web -e DATABASE_BACKEND=mysql -e MYSQL_HOST=192.168.1.2 -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=database -e MYSQL_PORT=3306 -e MYSQL_USER=user -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
+docker run --name prom_http_sd_web -e DATABASE_BACKEND=mysql -e MYSQL_HOST=192.168.1.2 -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=database -e MYSQL_PORT=3306 -e MYSQL_USER=user -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
 ```
 ```shell
 docker pull zh0uhaiwei/prometheus_http_sd_web:latest
 #use redis for db backend
-docker run -it --name prom_http_sd_web -e DATABASE_BACKEND=redis -e REDIS_HOST=192.168.1.1 -e REDIS_PASSWORD=password -e REDIS_DB=8 -e REDIS_PORT=6379 -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
+docker run --name prom_http_sd_web -e DATABASE_BACKEND=redis -e REDIS_HOST=192.168.1.1 -e REDIS_PASSWORD=password -e REDIS_DB=8 -e REDIS_PORT=6379 -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
 ```
 
 ### Use Shell
