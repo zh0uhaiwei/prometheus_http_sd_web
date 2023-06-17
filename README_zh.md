@@ -2,7 +2,6 @@
 
 [English](README.md) | 简体中文
 
-## 前言
 ### 当配置多个Prometheus实例，Targets的配置会变得非常繁琐，官方没有提供统一配置、展示的界面，所以启动本项目。通过本项目，可以很方便地直接在web页面上为多个Prometheus实例添加、删除targets。
 
 ## Python3依赖
@@ -41,12 +40,12 @@ export MYSQL_DATABASE="database"
 ```shell
 docker pull zh0uhaiwei/prometheus_http_sd_web:latest
 #use mysql for db backend
-docker run -it --name prom_http_sd_web -e DATABASE_BACKEND=mysql -e MYSQL_HOST=192.168.1.2 -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=database -e MYSQL_PORT=3306 -e MYSQL_USER=user -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
+docker run --name prom_http_sd_web -e DATABASE_BACKEND=mysql -e MYSQL_HOST=192.168.1.2 -e MYSQL_PASSWORD=password -e MYSQL_DATABASE=database -e MYSQL_PORT=3306 -e MYSQL_USER=user -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
 ```
 ```shell
 docker pull zh0uhaiwei/prometheus_http_sd_web:latest
 #use redis for db backend
-docker run -it --name prom_http_sd_web -e DATABASE_BACKEND=redis -e REDIS_HOST=192.168.1.1 -e REDIS_PASSWORD=password -e REDIS_DB=8 -e REDIS_PORT=6379 -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
+docker run --name prom_http_sd_web -e DATABASE_BACKEND=redis -e REDIS_HOST=192.168.1.1 -e REDIS_PASSWORD=password -e REDIS_DB=8 -e REDIS_PORT=6379 -p 8000:8000 zh0uhaiwei/prometheus_http_sd_web:latest
 ```
 ### 使用shell
 ### 启动一个<a href="https://redis.io/docs/getting-started/">Redis</a>或者<a href="https://docs.oracle.com/en-us/iaas/mysql-database/doc/getting-started.html">MySQL</a>实例
